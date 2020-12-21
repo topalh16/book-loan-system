@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, session, redirect, escape
 from service.UserService import attempt_login
+from helper import serialize, deserialize
 
 app = Flask(__name__)
 app.secret_key = b'czf_36./jsfmc'
@@ -8,7 +9,8 @@ app.secret_key = b'czf_36./jsfmc'
 @app.route('/')
 def home():
     if 'user' in session:
-        return 'Logged in as %s' % escape(session['user'][2])
+        user = deserialize(session['user'])
+        return 'Logged in as %s' % escape(user.full_name)
     return redirect("/login")
 
 
@@ -22,10 +24,10 @@ def login():
 @app.route('/authenticate', methods=['POST'])
 def authenticate():
     user = attempt_login(request.form['email'], request.form['password'])
-    if user == False:
+    if not user:
         return redirect('/login')
 
-    session['user'] = user
+    session['user'] = serialize(user)
     return redirect('/')
 
 

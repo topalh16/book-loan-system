@@ -1,4 +1,5 @@
 from .connection import get_db
+from model.User import User
 
 
 def get_user_by_email(email):
@@ -7,4 +8,5 @@ def get_user_by_email(email):
 
     # Streaming, in a transaction.
     with db.xact():
-        return next(x for x in get_by_email.rows(email))
+        user_row = next(x for x in get_by_email.rows(email))
+        return User(user_row)
