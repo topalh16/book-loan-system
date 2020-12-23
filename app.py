@@ -10,7 +10,7 @@ app.secret_key = b'czf_36./jsfmc'
 def home():
     if 'user' in session:
         user = deserialize(session['user'])
-        return 'Logged in as %s' % escape(user.full_name)
+        return render_template('home.html')
     return redirect("/login")
 
 
@@ -29,6 +29,11 @@ def authenticate():
 
     session['user'] = serialize(user)
     return redirect('/')
+
+@app.route('/logout', methods=['POST'])
+def logout():
+    session.clear()
+    return redirect('/login')
 
 
 if __name__ == '__main__':
