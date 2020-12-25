@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <title>{{ title }}</title>
+    <title>{{ title }} - Library Loan</title>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
@@ -17,10 +17,31 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    <a class="nav-link {% if title == 'Home' %}active{% endif %}"
+                       aria-current="page"
+                       href="/">
+                        Home
+                    </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if title == 'Books' %}active{% endif %}"
+                       aria-current="page"
+                       href="/books">
+                        Books
+                    </a>
+                </li>
+                {% if user.role == 1 %}
+                <li class="nav-item">
+                    <a class="nav-link {% if title == 'Users' %}active{% endif %}"
+                       aria-current="page"
+                       href="/users">
+                        Users
+                    </a>
+                </li>
+                {% endif %}
             </ul>
         </div>
+        <span class="float-right mr-3">{{ user.full_name }}</span>
         <form class="float-right" action="/logout" method="post">
             <button class="btn btn-outline-primary" type="submit">Logout</button>
         </form>

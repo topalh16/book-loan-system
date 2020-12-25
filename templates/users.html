@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div class="row">
+        <h1 class="display-4">Users</h1>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-4">
+            {% if saved_users == 1 %}
+            <div class="alert alert-success">
+                User has been successfully saved
+            </div>
+            {% endif %}
+            <form action="/users" method="post">
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input type="email" name="email" class="form-control" id="email">
+                </div>
+                <div class="form-group">
+                    <label for="full-name">Full name</label>
+                    <input type="text" name="full_name" class="form-control" id="full-name">
+                </div>
+                <div class="form-group">
+                    <label for="department">Department</label>
+                    <input type="text" name="department" class="form-control" id="department">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" class="form-control" id="password">
+                </div>
+                <div class="form-group">
+                    <label for="role">User Type</label>
+                    <select name="role" class="form-control" id="role">
+                        <option value="1">Admin</option>
+                        <option value="2">User</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-dark">Submit</button>
+            </form>
+        </div>
+        <div class="col-md-8">
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Email</th>
+                    <th scope="col">Full Name</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Birth Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    <tr>
+                        <th scope="row">{{ user.email }}</th>
+                        <td>{{ user.full_name }}</td>
+                        <td>{{ user.department }}</td>
+                        <td class="text-center"> {% if user.birth_date == None %} - {% else %}
+                            {{ user.birth_date }} {% endif %}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
