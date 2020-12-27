@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, session, redirect, escape
 from service.UserService import attempt_login, get_all_users, save_user
-from service.BookService import get_all_books
+from service.BookService import get_all_books, get_book_by_isbn
 from model.Role import Role
 from helper import serialize, deserialize
 
@@ -47,6 +47,7 @@ def books():
         return render_template('books.html', title="Books", user=user, books=books)
     return redirect("/login")
 
+
 @app.route('/users', methods=['GET', 'POST'])
 def users():
     affected_rows = 0
@@ -59,6 +60,16 @@ def users():
         users = get_all_users()
         return render_template('users.html', title="Users", user=user, users=users, saved_users=affected_rows)
     return redirect("/login")
+
+
+@app.route('/book/<isbn>', methods=['GET'])
+def view_book(isbn):
+    if 'user' in session:
+        user = deserialize(session['user'])
+        book = get_book_by_isbn(isbn)
+        return render_template('book.html', title=book.title, user=user, book=book)
+    return redirect("/login")
+
 
 if __name__ == '__main__':
     app.run()

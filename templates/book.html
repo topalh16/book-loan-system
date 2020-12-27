@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="display-4">{{ book.title }}</h1>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <p>
+                <b>ISBN:</b> {{ book.isbn }}
+            </p>
+            <p>
+                <b>Author:</b> {{ book.author }}
+            </p>
+            <p>
+                <b>Number of pages:</b> {{ book.page_count }}
+            </p>
+        </div>
+        {% if book.image_url != None %}
+            <div class="col-md-6">
+                <img src="{{ book.image_url }}" alt="{{ book.title }}" width="50%" />
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
