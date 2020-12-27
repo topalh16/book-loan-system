@@ -20,3 +20,8 @@ def get(isbn):
     with db.xact():
         book_row = next(book for book in get_by_isbn.rows(isbn))
         return Book(book_row)
+
+
+def save(book):
+    mkbook = db.prepare("INSERT INTO public.books (isbn, title, author_id, page_count, count, image_url) VALUES ($1, $2, $3, $4, $5, $6)")
+    return mkbook(book['isbn'], book['title'], int(book['author_id']), int(book['page_count']), int(book['count']), book['image_url'])

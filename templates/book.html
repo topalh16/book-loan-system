@@ -17,7 +17,7 @@
                 <b>Number of pages:</b> {{ book.page_count }}
             </p>
         </div>
-        {% if book.image_url != None %}
+        {% if book.image_url != None and book.image_url != '' %}
             <div class="col-md-6">
                 <img src="{{ book.image_url }}" alt="{{ book.title }}" width="50%" />
             </div>

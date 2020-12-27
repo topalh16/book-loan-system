@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, session, redirect, escape
 from service.UserService import attempt_login, get_all_users, save_user
-from service.BookService import get_all_books, get_book_by_isbn
+from service.BookService import get_all_books, get_book_by_isbn, save_book
 from service.AuthorService import get_all_authors, save_author
 from model.Role import Role
 from helper import serialize, deserialize
@@ -27,6 +27,7 @@ def login():
 @app.route('/authenticate', methods=['POST'])
 def authenticate():
     user = attempt_login(request.form['email'], request.form['password'])
+    print(user)
     if not user:
         return redirect('/login')
 
@@ -40,8 +41,11 @@ def logout():
     return redirect('/login')
 
 
-@app.route('/books')
+@app.route('/books', methods=['GET', 'POST'])
 def books():
+    affected_rows = 0
+    if request.method == 'POST':
+        affected_rows = save_book(request.form)
     if 'user' in session:
         user = deserialize(session['user'])
         books = get_all_books()
@@ -85,6 +89,14 @@ def view_book(isbn):
         return render_template('book.html', title=book.title, user=user, book=book)
     return redirect("/login")
 
+@app.route('/book/new', methods=['GET'])
+def add_book():
+    if 'user' in session:
+        user = deserialize(session['user'])
+        if user.role is not Role.ADMIN.value:
+            return redirect("/")
+        return render_template('book_edit.html', title="New Book", user=user)
+    return redirect("/login")
 
 if __name__ == '__main__':
     app.run()

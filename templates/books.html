@@ -1,34 +1,45 @@
 {% extends "layout.html" %}
 {% block body %}
     <div class="row">
-        <h1 class="display-4">Books</h1>
+        <div class="col-md-12">
+            <h1 class="display-4">Books</h1>
+        </div>
     </div>
     <div class="row mt-3">
-        <table class="table">
-            <thead class="thead-dark">
-            <tr>
-                <th scope="col">ISBN</th>
-                <th scope="col">Title</th>
-                <th scope="col">Author</th>
-                <th scope="col">Number of Pages</th>
-                <th scope="col">Available Count</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for book in books %}
+        <div class="col-md-12">
+            <table class="table">
+                <thead class="thead-dark">
                 <tr>
-                    <th scope="row">{{ book.isbn }}</th>
-                    <td>
-                        <a href="{{ '/book/' + book.isbn }}" style="color: inherit">
-                            {{ book.title }}
-                        </a>
-                    </td>
-                    <td>{{ book.author }}</td>
-                    <td>{{ book.page_count }}</td>
-                    <td>{{ book.count }}</td>
+                    <th scope="col">ISBN</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Author</th>
+                    <th scope="col">Number of Pages</th>
+                    <th scope="col">Available Count</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {% for book in books %}
+                    <tr>
+                        <th scope="row">{{ book.isbn }}</th>
+                        <td>
+                            <a href="{{ '/book/' + book.isbn }}" style="color: inherit">
+                                {{ book.title }}
+                            </a>
+                        </td>
+                        <td>{{ book.author }}</td>
+                        <td>{{ book.page_count }}</td>
+                        <td>{{ book.count }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
+    {% if user.role == 1 %}
+    <div class="row mt-3">
+        <div class="col-md-12">
+            <a class="btn btn-secondary" href="/book/new">Add a book</a>
+        </div>
+    </div>
+    {% endif %}
 {% endblock %}

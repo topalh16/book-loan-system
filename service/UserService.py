@@ -8,6 +8,7 @@ def attempt_login(email, password):
     else:
         return False
 
+
 def save_user(user):
     return save(user)[1]
 
