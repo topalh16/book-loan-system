@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, session, redirect, escape
 from service.UserService import attempt_login, get_all_users, save_user
 from service.BookService import get_all_books, get_book_by_isbn
+from service.AuthorService import get_all_authors, save_author
 from model.Role import Role
 from helper import serialize, deserialize
 
@@ -59,6 +60,20 @@ def users():
             return redirect("/")
         users = get_all_users()
         return render_template('users.html', title="Users", user=user, users=users, saved_users=affected_rows)
+    return redirect("/login")
+
+
+@app.route('/authors', methods=['GET', 'POST'])
+def authors():
+    affected_rows = 0
+    if request.method == 'POST':
+        affected_rows = save_author(request.form)
+    if 'user' in session:
+        user = deserialize(session['user'])
+        if user.role is not Role.ADMIN.value:
+            return redirect("/")
+        authors = get_all_authors()
+        return render_template('authors.html', title="Authors", user=user, authors=authors, saved_authors=affected_rows)
     return redirect("/login")
 
 
