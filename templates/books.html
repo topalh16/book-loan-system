@@ -16,7 +16,7 @@
                     <th scope="col">Number of Pages</th>
                     <th scope="col">Available Count</th>
                     {% if user.role == 1 %}
-                        <th scope="col"></th>
+                        <th scope="col">Actions</th>
                     {% endif %}
                 </tr>
                 </thead>
@@ -35,6 +35,7 @@
                         {% if user.role == 1 %}
                             <td>
                                 <a href="{{ '/book/edit/' + book.isbn }}">Edit</a>
+                                <a class="text-danger ml-3" href="{{ '/book/delete/' + book.isbn }}">Delete</a>
                             </td>
                         {% endif %}
                     </tr>

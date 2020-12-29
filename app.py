@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, session, redirect
 from service.UserService import attempt_login, get_all_users, save_user
-from service.BookService import get_all_books, get_book_by_isbn, save_book, update_book
+from service.BookService import get_all_books, get_book_by_isbn, save_book, update_book, delete_book
 from service.AuthorService import get_all_authors, save_author
 from model.Role import Role
 from helper import serialize, deserialize
@@ -125,6 +125,17 @@ def book_update(isbn):
         update_book(isbn, request.form)
         return redirect("/books")
     return redirect("/login")
+
+
+# Delete existing book
+@app.route('/book/delete/<isbn>', methods=['GET'])
+def book_delete(isbn):
+    if 'user' in session:
+        user = deserialize(session['user'])
+        delete_book(isbn)
+        return redirect("/books")
+    return redirect("/login")
+
 
 
 # ------------------------------ #

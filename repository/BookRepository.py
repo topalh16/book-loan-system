@@ -29,3 +29,7 @@ def save(book):
 def update(isbn, book):
     update_book = db.prepare("UPDATE public.books SET count=$2, image_url=$3 WHERE isbn = $1")
     return update_book(isbn, int(book['count']), book['image_url'])
+
+def delete(isbn):
+    delete_book = db.prepare("DELETE FROM public.books WHERE isbn = $1")
+    return delete_book(isbn)
