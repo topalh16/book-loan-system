@@ -6,3 +6,4 @@ class Book:
         self.count = book_row[3]
         self.title = book_row[4]
         self.image_url = book_row[5]
+        self.author_id = book_row[6]

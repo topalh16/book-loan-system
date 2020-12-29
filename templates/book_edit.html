@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            {% if book is defined %}
+                <h1 class="display-4">{{ book.title }}</h1>
+            {% else %}
+                <h1 class="display-4">New Book</h1>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row mt-4 mb-4">
+        <div class="col-md-6">
+            <form action="{% if book is defined %}/book/update/{{ book.isbn }}{% else %}/books{% endif %}" method="post">
+                <div class="form-group">
+                    <label for="isbn">ISBN</label>
+                    {% if book is defined %}
+                        <input type="text" name="isbn" class="form-control" id="isbn"
+                           value="{% if book is defined %}{{ book.isbn }}{% endif %}" disabled>
+                    {% else %}
+                        <input type="text" name="isbn" class="form-control" id="isbn"
+                           value="{% if book is defined %}{{ book.isbn }}{% endif %}">
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    {% if book is defined %}
+                        <input type="text" name="title" class="form-control" id="title"
+                           value="{% if book is defined %}{{ book.title }}{% endif %}" disabled>
+                    {% else %}
+                        <input type="text" name="title" class="form-control" id="title"
+                           value="{% if book is defined %}{{ book.title }}{% endif %}">
+                    {% endif %}
+
+                </div>
+                <div class="form-group">
+                    <label for="author-id">Author ID</label>
+                    {% if book is defined %}
+                        <input type="text" name="author_id" class="form-control" id="author-id"
+                           value="{% if book is defined %}{{ book.author_id }}{% endif %}" disabled>
+                    {% else %}
+                        <input type="text" name="author_id" class="form-control" id="author-id"
+                           value="{% if book is defined %}{{ book.author_id }}{% endif %}">
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="page-count">Page Count</label>
+                    {% if book is defined %}
+                        <input type="text" name="page_count" class="form-control" id="page-count"
+                           value="{% if book is defined %}{{ book.page_count }}{% endif %}" disabled>
+                    {% else %}
+                        <input type="text" name="page_count" class="form-control" id="page-count"
+                           value="{% if book is defined %}{{ book.page_count }}{% endif %}">
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="count">Count</label>
+                    <input type="text" name="count" class="form-control" id="count"
+                           value="{% if book is defined %}{{ book.count }}{% endif %}">
+                </div>
+                <div class="form-group">
+                    <label for="image-url">Image Url</label>
+                    <input type="text" name="image_url" class="form-control" id="image-url"
+                           value="{% if book is defined and book.image_url != None %}{{ book.image_url }}{% endif %}">
+                </div>
+                <button type="submit" class="btn btn-dark">Submit</button>
+            </form>
+        </div>
+        {% if book is defined and book.image_url != None and book.image_url != '' %}
+            <div class="col-md-5 offset-md-1">
+                <img src="{{ book.image_url }}" alt="{{ book.title }}" width="50%" />
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

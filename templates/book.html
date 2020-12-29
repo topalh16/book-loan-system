@@ -16,6 +16,9 @@
             <p>
                 <b>Number of pages:</b> {{ book.page_count }}
             </p>
+            <p>
+                <a href="{{ '/book/edit/' + book.isbn }}">Edit</a>
+            </p>
         </div>
         {% if book.image_url != None and book.image_url != '' %}
             <div class="col-md-6">

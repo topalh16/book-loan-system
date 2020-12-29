@@ -15,6 +15,9 @@
                     <th scope="col">Author</th>
                     <th scope="col">Number of Pages</th>
                     <th scope="col">Available Count</th>
+                    {% if user.role == 1 %}
+                        <th scope="col"></th>
+                    {% endif %}
                 </tr>
                 </thead>
                 <tbody>
@@ -29,6 +32,11 @@
                         <td>{{ book.author }}</td>
                         <td>{{ book.page_count }}</td>
                         <td>{{ book.count }}</td>
+                        {% if user.role == 1 %}
+                            <td>
+                                <a href="{{ '/book/edit/' + book.isbn }}">Edit</a>
+                            </td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>

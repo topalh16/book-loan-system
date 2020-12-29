@@ -1,6 +1,6 @@
-from flask import Flask, render_template, request, session, redirect, escape
+from flask import Flask, render_template, request, session, redirect
 from service.UserService import attempt_login, get_all_users, save_user
-from service.BookService import get_all_books, get_book_by_isbn, save_book
+from service.BookService import get_all_books, get_book_by_isbn, save_book, update_book
 from service.AuthorService import get_all_authors, save_author
 from model.Role import Role
 from helper import serialize, deserialize
@@ -41,18 +41,6 @@ def logout():
     return redirect('/login')
 
 
-@app.route('/books', methods=['GET', 'POST'])
-def books():
-    affected_rows = 0
-    if request.method == 'POST':
-        affected_rows = save_book(request.form)
-    if 'user' in session:
-        user = deserialize(session['user'])
-        books = get_all_books()
-        return render_template('books.html', title="Books", user=user, books=books)
-    return redirect("/login")
-
-
 @app.route('/users', methods=['GET', 'POST'])
 def users():
     affected_rows = 0
@@ -81,6 +69,22 @@ def authors():
     return redirect("/login")
 
 
+# ---------- Book Operations ---------- #
+
+# Listing
+@app.route('/books', methods=['GET', 'POST'])
+def books():
+    affected_rows = 0
+    if request.method == 'POST':
+        affected_rows = save_book(request.form)
+    if 'user' in session:
+        user = deserialize(session['user'])
+        books = get_all_books()
+        return render_template('books.html', title="Books", user=user, books=books)
+    return redirect("/login")
+
+
+# Viewing one book
 @app.route('/book/<isbn>', methods=['GET'])
 def view_book(isbn):
     if 'user' in session:
@@ -89,6 +93,8 @@ def view_book(isbn):
         return render_template('book.html', title=book.title, user=user, book=book)
     return redirect("/login")
 
+
+# Creating new book
 @app.route('/book/new', methods=['GET'])
 def add_book():
     if 'user' in session:
@@ -97,6 +103,32 @@ def add_book():
             return redirect("/")
         return render_template('book_edit.html', title="New Book", user=user)
     return redirect("/login")
+
+
+# Editing existing book
+@app.route('/book/edit/<isbn>', methods=['GET'])
+def edit_book(isbn):
+    if 'user' in session:
+        user = deserialize(session['user'])
+        if user.role is not Role.ADMIN.value:
+            return redirect("/")
+        book = get_book_by_isbn(isbn)
+        return render_template('book_edit.html', title=book.title, user=user, book=book)
+    return redirect("/login")
+
+
+# Updating existing book
+@app.route('/book/update/<isbn>', methods=['POST'])
+def book_update(isbn):
+    if 'user' in session:
+        user = deserialize(session['user'])
+        update_book(isbn, request.form)
+        return redirect("/books")
+    return redirect("/login")
+
+
+# ------------------------------ #
+
 
 if __name__ == '__main__':
     app.run()

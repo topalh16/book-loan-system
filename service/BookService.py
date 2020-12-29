@@ -1,4 +1,4 @@
-from repository.BookRepository import get_all, get, save
+from repository.BookRepository import get_all, get, save, update
 
 
 def get_all_books():
@@ -11,3 +11,7 @@ def get_book_by_isbn(isbn):
 
 def save_book(book):
     return save(book)[1]
+
+
+def update_book(isbn, book):
+    return update(isbn, book)[1]
