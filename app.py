@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, session, redirect
-from service.UserService import attempt_login, get_all_users, save_user
+from service.UserService import attempt_login, get_all_users, save_user, get_user_by_id, update_user
 from service.BookService import get_all_books, get_book_by_isbn, save_book, update_book, delete_book
 from service.AuthorService import get_all_authors, save_author
 from model.Role import Role
@@ -41,6 +41,8 @@ def logout():
     return redirect('/login')
 
 
+# ---------- User Operations ---------- #
+
 @app.route('/users', methods=['GET', 'POST'])
 def users():
     affected_rows = 0
@@ -53,6 +55,31 @@ def users():
         users = get_all_users()
         return render_template('users.html', title="Users", user=user, users=users, saved_users=affected_rows)
     return redirect("/login")
+
+
+# Editing existing user
+@app.route('/user/edit/<user_id>', methods=['GET'])
+def edit_user(user_id):
+    if 'user' in session:
+        user = deserialize(session['user'])
+        if user.role is not Role.ADMIN.value:
+            return redirect("/")
+        selected_user = get_user_by_id(user_id)
+        users = get_all_users()
+        return render_template('user_edit.html', title=selected_user.full_name, user=user, users=users, selected_user=selected_user)
+    return redirect("/login")
+
+
+# Updating existing user
+@app.route('/user/update/<user_id>', methods=['POST'])
+def user_update(user_id):
+    if 'user' in session:
+        user = deserialize(session['user'])
+        update_user(user_id, request.form)
+        return redirect("/users")
+    return redirect("/login")
+
+# ------------------------------ #
 
 
 @app.route('/authors', methods=['GET', 'POST'])
@@ -135,7 +162,6 @@ def book_delete(isbn):
         delete_book(isbn)
         return redirect("/books")
     return redirect("/login")
-
 
 
 # ------------------------------ #

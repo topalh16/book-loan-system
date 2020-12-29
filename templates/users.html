@@ -45,16 +45,24 @@
                     <th scope="col">Full Name</th>
                     <th scope="col">Department</th>
                     <th scope="col">Birth Date</th>
+                    {% if user.role == 1 %}
+                        <th scope="col">Actions</th>
+                    {% endif %}
                 </tr>
                 </thead>
                 <tbody>
-                {% for user in users %}
+                {% for this in users %}
                     <tr>
-                        <th scope="row">{{ user.email }}</th>
-                        <td>{{ user.full_name }}</td>
-                        <td>{{ user.department }}</td>
-                        <td class="text-center"> {% if user.birth_date == None %} - {% else %}
-                            {{ user.birth_date }} {% endif %}</td>
+                        <th scope="row">{{ this.email }}</th>
+                        <td>{{ this.full_name }}</td>
+                        <td>{{ this.department }}</td>
+                        <td class="text-center"> {% if this.birth_date == None %} - {% else %}
+                            {{ this.birth_date }} {% endif %}</td>
+                        {% if user.role == 1 %}
+                            <td>
+                                <a href="{{ '/user/edit/' ~ this.user_id }}">Edit</a>
+                            </td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>
