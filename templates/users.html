@@ -61,6 +61,7 @@
                         {% if user.role == 1 %}
                             <td>
                                 <a href="{{ '/user/edit/' ~ this.user_id }}">Edit</a>
+                                <a class="text-danger ml-3" href="{{ '/user/delete/' ~ this.user_id }}">Delete</a>
                             </td>
                         {% endif %}
                     </tr>

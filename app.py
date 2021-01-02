@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, session, redirect
-from service.UserService import attempt_login, get_all_users, save_user, get_user_by_id, update_user
+from service.UserService import attempt_login, get_all_users, save_user, get_user_by_id, update_user, delete_user
 from service.BookService import get_all_books, get_book_by_isbn, save_book, update_book, delete_book
 from service.AuthorService import get_all_authors, save_author
 from model.Role import Role
@@ -76,6 +76,16 @@ def user_update(user_id):
     if 'user' in session:
         user = deserialize(session['user'])
         update_user(user_id, request.form)
+        return redirect("/users")
+    return redirect("/login")
+
+
+# Delete existing user
+@app.route('/user/delete/<user_id>', methods=['GET'])
+def user_delete(user_id):
+    if 'user' in session:
+        user = deserialize(session['user'])
+        delete_user(user_id)
         return redirect("/users")
     return redirect("/login")
 

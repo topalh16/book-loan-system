@@ -40,3 +40,7 @@ def update(user_id, user):
     update_user = db.prepare(
         "UPDATE public.users SET email = $2, full_name = $3, department = $4, password = $5, role = $6 WHERE user_id = $1")
     return update_user(int(user_id), user['email'], user['full_name'], user['department'], user['password'], int(user['role']))
+
+def delete(user_id):
+    delete_user = db.prepare("DELETE FROM public.users WHERE user_id = $1")
+    return delete_user(int(user_id))

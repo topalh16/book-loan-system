@@ -1,4 +1,4 @@
-from repository.UserRepository import get_user_by_email, get_all, save, update, get_by_id
+from repository.UserRepository import get_user_by_email, get_all, save, update, get_by_id, delete
 
 
 def attempt_login(email, password):
@@ -23,3 +23,7 @@ def get_user_by_id(user_id):
 
 def update_user(user_id, user):
     return update(user_id, user)
+
+
+def delete_user(user_id):
+    return delete(user_id)[1]
