@@ -1,7 +1,9 @@
-from flask import Flask, render_template, request, session, redirect
-from service.UserService import attempt_login, get_all_users, save_user, get_user_by_id, update_user, delete_user
+from flask import Flask, render_template, request, session, redirect, flash
+from service.UserService import attempt_login, get_all_users, save_user, get_user_by_id, update_user, delete_user, \
+    get_users_by_name
 from service.BookService import get_all_books, get_book_by_isbn, save_book, update_book, delete_book
 from service.AuthorService import get_all_authors, save_author
+from service.BooksBorrowedService import lend_book_to_user
 from model.Role import Role
 from helper import serialize, deserialize
 
@@ -66,7 +68,8 @@ def edit_user(user_id):
             return redirect("/")
         selected_user = get_user_by_id(user_id)
         users = get_all_users()
-        return render_template('user_edit.html', title=selected_user.full_name, user=user, users=users, selected_user=selected_user)
+        return render_template('user_edit.html', title=selected_user.full_name, user=user, users=users,
+                               selected_user=selected_user)
     return redirect("/login")
 
 
@@ -88,6 +91,7 @@ def user_delete(user_id):
         delete_user(user_id)
         return redirect("/users")
     return redirect("/login")
+
 
 # ------------------------------ #
 
@@ -127,7 +131,11 @@ def view_book(isbn):
     if 'user' in session:
         user = deserialize(session['user'])
         book = get_book_by_isbn(isbn)
-        return render_template('book.html', title=book.title, user=user, book=book)
+        searched_user = request.args.get('user')
+        users = []
+        if searched_user:
+            users = get_users_by_name(searched_user)
+        return render_template('book.html', title=book.title, user=user, book=book, searched_users=users)
     return redirect("/login")
 
 
@@ -159,10 +167,26 @@ def edit_book(isbn):
 def book_update(isbn):
     if 'user' in session:
         user = deserialize(session['user'])
+        if user.role is not Role.ADMIN.value:
+            return redirect(request.referrer)
         update_book(isbn, request.form)
         return redirect("/books")
     return redirect("/login")
 
+
+# Lending book
+@app.route('/book/lend/<isbn>/<user_id>', methods=['GET'])
+def lend_book(isbn, user_id):
+    if 'user' in session:
+        user = deserialize(session['user'])
+        if user.role is not Role.ADMIN.value:
+            return redirect(request.referrer)
+        affected_rows = lend_book_to_user(isbn, user_id)
+        if affected_rows == 1:
+            lended_user = get_user_by_id(user_id)
+            flash('You successfully lended the book to ' + lended_user.full_name)
+        return redirect("/book/" + isbn)
+    return redirect("/login")
 
 # Delete existing book
 @app.route('/book/delete/<isbn>', methods=['GET'])

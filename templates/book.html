@@ -16,13 +16,56 @@
             <p>
                 <b>Number of pages:</b> {{ book.page_count }}
             </p>
-            <p>
-                <a href="{{ '/book/edit/' + book.isbn }}">Edit</a>
-            </p>
-        </div>
+            {% if user.role == 1 %}
+                <p>
+                    <a href="{{ '/book/edit/' + book.isbn }}">Edit</a>
+                </p>
+            {% endif %}
+
+            {% if user.role == 1 %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3>Lend</h3>
+                    </div>
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <div class="col-md-12">
+                                <div class="alert alert-success">
+                                    {% for message in messages %}
+                                        {{ message }}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                    <div class="col-md-12 mt-3">
+                        <form class="form-inline" method="get">
+                            <input type="text" name="user" class="form-control" id="user" placeholder="Search user">
+                            <button class="btn btn-secondary ml-3" type="submit">Search</button>
+                        </form>
+                        {% if searched_users|length > 0 %}
+                            <table class="table mt-3">
+
+                                <tbody>
+                                {% for searched_user in searched_users %}
+                                    <tr>
+                                        <th scope="row">{{ searched_user.email }}</th>
+                                        <td>{{ searched_user.full_name }}</td>
+                                        <td>
+                                            <a href="{{ '/book/lend/' + book.isbn + '/' ~ searched_user.user_id }}">Choose</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% endif %}
+                    </div>
+                </div>
+                </div>
+            {% endif %}
         {% if book.image_url != None and book.image_url != '' %}
             <div class="col-md-6">
-                <img src="{{ book.image_url }}" alt="{{ book.title }}" width="50%" />
+                <img src="{{ book.image_url }}" alt="{{ book.title }}" width="50%"/>
             </div>
         {% endif %}
     </div>
