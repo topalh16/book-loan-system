@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script
+            src="https://code.jquery.com/jquery-3.5.1.js"
+            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+            crossorigin="anonymous"></script>
     <title>{{ title }} - Library Loan</title>
 </head>
 <body>
@@ -31,20 +35,27 @@
                     </a>
                 </li>
                 {% if user.role == 1 %}
-                <li class="nav-item">
-                    <a class="nav-link {% if title == 'Authors' %}active{% endif %}"
-                       aria-current="page"
-                       href="/authors">
-                        Authors
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if title == 'Users' %}active{% endif %}"
-                       aria-current="page"
-                       href="/users">
-                        Users
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if title == 'Authors' %}active{% endif %}"
+                           aria-current="page"
+                           href="/authors">
+                            Authors
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if title == 'Users' %}active{% endif %}"
+                           aria-current="page"
+                           href="/users">
+                            Users
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if title == 'Book Return' %}active{% endif %}"
+                           aria-current="page"
+                           href="/book-return">
+                            Book Return
+                        </a>
+                    </li>
                 {% endif %}
             </ul>
         </div>
@@ -57,5 +68,6 @@
 <div class="container mt-3">
     {% block body %}{% endblock %}
 </div>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

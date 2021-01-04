@@ -3,7 +3,7 @@ from service.UserService import attempt_login, get_all_users, save_user, get_use
     get_users_by_name
 from service.BookService import get_all_books, get_book_by_isbn, save_book, update_book, delete_book
 from service.AuthorService import get_all_authors, save_author
-from service.BooksBorrowedService import lend_book_to_user
+from service.BooksBorrowedService import lend_book_to_user, get_borrows_by_user_id, return_books
 from model.Role import Role
 from helper import serialize, deserialize
 
@@ -200,6 +200,33 @@ def book_delete(isbn):
 
 # ------------------------------ #
 
+
+# ---------- Book Return Operations ---------- #
+
+@app.route('/book-return', methods=['GET', 'POST'])
+def book_return():
+    if 'user' in session:
+        user = deserialize(session['user'])
+        if user.role is not Role.ADMIN.value:
+            return redirect("/")
+
+        if request.method == 'POST':
+            return_books(request.form.getlist('borrow'))
+
+        searched_user = request.args.get('user')
+        users = []
+        if searched_user:
+            users = get_users_by_name(searched_user)
+
+        searched_user_id = request.args.get('user_id')
+        borrows = []
+        if searched_user_id:
+            borrows = get_borrows_by_user_id(searched_user_id)
+        return render_template('book_return.html', title="Book Return", user=user, searched_users=users, borrows=borrows)
+    return redirect("/login")
+
+
+# ------------------------------ #
 
 if __name__ == '__main__':
     app.run()

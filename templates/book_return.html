@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div class="row">
+        <h1 class="display-4">Book Return</h1>
+    </div>
+    <div class="row mt-4">
+        <form class="form-inline" method="get">
+            <input type="text" name="user" class="form-control" id="user" placeholder="Search user">
+            <button class="btn btn-secondary ml-3" type="submit">Search</button>
+        </form>
+        {% if searched_users|length > 0 %}
+            <table class="table mt-3">
+                <tbody>
+                {% for searched_user in searched_users %}
+                    <tr>
+                        <th scope="row">{{ searched_user.email }}</th>
+                        <td>{{ searched_user.full_name }}</td>
+                        <td>
+                            <a href="{{ '/book-return?user_id=' ~ searched_user.user_id }}">Choose</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+    {% if borrows|length > 0 %}
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <h4>Books Borrowed</h4>
+                <hr/>
+                <form method="post">
+                    {% for borrow in borrows %}
+                        <div class="form-group form-check">
+                            <input type="checkbox" name="borrow" value="{{ borrow.borrow_id }}" class="form-check-input"
+                                   id="check-{{ borrow.isbn }}">
+                            <label class="form-check-label"
+                                   for="check-{{ borrow.isbn }}">{{ borrow.book_title }}</label>
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary">Return</button>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
