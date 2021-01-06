@@ -17,7 +17,8 @@ app.secret_key = b'czf_36./jsfmc'
 def home():
     if 'user' in session:
         user = deserialize(session['user'])
-        return render_template('home.html', title="Home", user=user)
+        borrows = get_borrows_by_user_id(user.user_id)
+        return render_template('home.html', title="Home", user=user, borrows=borrows)
     return redirect("/login")
 
 

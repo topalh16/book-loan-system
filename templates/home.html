@@ -4,6 +4,34 @@
         <h1 class="display-4">Home Page</h1>
     </div>
     <div class="row">
-        <p class="lead">Welcome to the library book loan system.</p>
+        {% if user.role == 1 %}
+            <p class="lead">Welcome to the library book loan system.</p>
+        {% elif user.role == 2 %}
+            <p class="lead">You can see the books you borrowed below.</p>
+        {% endif %}
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-12">
+            {% if borrows|length > 0 %}
+                <table class="table mt-3">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Title</th>
+                        <th scope="col">Borrow Date</th>
+                        <th scope="col">Remaining Days</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for borrow in borrows %}
+                        <tr>
+                            <th scope="row">{{ borrow.book_title }}</th>
+                            <td>{{ borrow.taken_date }}</td>
+                            <td>{{ borrow.remaining_days }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
     </div>
 {% endblock %}
