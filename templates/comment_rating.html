@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="display-4">Comment & Rating</h1>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <h4>{{ book.title }}</h4>
+            <form method="post">
+                <div class="form-group">
+                    <label for="rating">Rating</label>
+                    <select class="form-control" id="rating" name="rating">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="comment">Comment</label>
+                    <textarea class="form-control" id="comment" rows="5" name="comment"></textarea>
+                </div>
+                <button type="submit" class="btn btn-secondary">Save</button>
+            </form>
+        </div>
+        {% if book.image_url != None and book.image_url != '' %}
+            <div class="col-md-3 offset-md-1">
+                <img src="{{ book.image_url }}" alt="{{ book.title }}" width="100%"/>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

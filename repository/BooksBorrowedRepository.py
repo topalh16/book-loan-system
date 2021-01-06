@@ -10,9 +10,10 @@ def save(borrow):
     return mkborrow(int(borrow['user_id']), borrow['isbn'], borrow['taken_date'])
 
 
-def get_by_user_id(user_id):
+def get_by_user_id(user_id, is_null=True):
+    suffix = "null" if is_null else "not null"
     find_by_user_id = db.prepare(
-        "SELECT * FROM public.books_borrowed T JOIN books B ON T.isbn=B.isbn WHERE user_id = $1 and brought_date is null")
+        "SELECT * FROM public.books_borrowed T JOIN books B ON T.isbn=B.isbn WHERE user_id = $1 and brought_date is " + suffix)
 
     with db.xact():
         borrows = []

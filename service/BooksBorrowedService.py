@@ -15,6 +15,8 @@ def lend_book_to_user(isbn, user_id):
 def get_borrows_by_user_id(user_id):
     return get_by_user_id(user_id)
 
+def get_not_returned_borrows_by_user_id(user_id):
+    return get_by_user_id(user_id, False)
 
 def return_books(ids):
     update_brought_date_by_ids(ids, datetime.date.today())

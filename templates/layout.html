@@ -56,6 +56,14 @@
                             Book Return
                         </a>
                     </li>
+                {% elif user.role == 2 %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if title == 'Borrow History' %}active{% endif %}"
+                           aria-current="page"
+                           href="/borrow-history">
+                            Borrow History
+                        </a>
+                    </li>
                 {% endif %}
             </ul>
         </div>
