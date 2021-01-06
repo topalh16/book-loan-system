@@ -32,6 +32,7 @@ def login():
 def authenticate():
     user = attempt_login(request.form['email'], request.form['password'])
     if not user:
+        flash('Email or password is incorrect.')
         return redirect('/login')
 
     session['user'] = serialize(user)

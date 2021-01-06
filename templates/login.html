@@ -11,6 +11,19 @@
     <div class="row mt-5">
         <div class="col-md-4 offset-md-4 card" style="padding: 30px; margin-top: 120px; background: #ccccccaa">
             <h2 class="text-center" style="margin-bottom: 30px;">Library Login</h2>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <div class="alert alert-danger">
+                                {% for message in messages %}
+                                    {{ message }}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endwith %}
             <form action="/authenticate" method="post">
                 <div class="mb-3">
                     <label for="input-email" class="form-label">Email</label>
