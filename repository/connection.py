@@ -2,7 +2,7 @@ import postgresql
 import os
 
 url = os.environ.get("DATABASE_URL")
-
+print(url)
 
 def get_db():
     if url is None:
