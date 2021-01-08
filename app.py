@@ -12,7 +12,6 @@ from helper import serialize, deserialize
 app = Flask(__name__)
 app.secret_key = b'czf_36./jsfmc'
 
-
 @app.route('/')
 def home():
     if 'user' in session:
