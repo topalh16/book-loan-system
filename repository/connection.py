@@ -2,10 +2,12 @@ import postgresql
 import os
 
 url = os.environ.get("DATABASE_URL")
-print(url)
+connection_string = 'pq://' + url[11:]
+
 
 def get_db():
     if url is None:
         return postgresql.open('pq://postgres:Gandalf01@127.0.0.1:5432/book_loan')
     else:
-        return postgresql.open('pq://' + url[11:])
+        print(connection_string)
+        return postgresql.open(connection_string)
