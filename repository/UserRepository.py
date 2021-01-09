@@ -3,8 +3,8 @@ from model.User import User
 
 
 def save(user):
-    sql_raw = "INSERT INTO public.users (email, full_name, department, password, role) VALUES ({0}, {1}, {2}, {3}, {4})"
-    sql = sql_raw.format(user['email'], user['full_name'], user['department'], user['password'], int(user['role']))
+    sql_raw = "INSERT INTO public.users (email, full_name, department, password, role) VALUES ('{0}', '{1}', '{2}', '{3}', {4})"
+    sql = sql_raw.format(user['email'], user['full_name'], user['department'], user['password'], user['role'])
     return insert(sql)
 
 
