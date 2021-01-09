@@ -28,7 +28,7 @@ def update_user(user_id, user):
 
 
 def delete_user(user_id):
-    return delete(user_id)[1]
+    return delete(user_id)
 
 
 def get_users_by_name(full_name):

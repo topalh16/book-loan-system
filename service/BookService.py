@@ -14,8 +14,8 @@ def save_book(book):
 
 
 def update_book(isbn, book):
-    return update(isbn, book)[1]
+    return update(isbn, book)
 
 
 def delete_book(isbn):
-    return delete(isbn)[1]
+    return delete(isbn)
