@@ -1,58 +1,55 @@
-from .connection import get_db
+from .connection import insert, query, update as update_db, delete as delete_db
 from model.User import User
-
-db = get_db()
 
 
 def save(user):
-    mkuser = db.prepare(
-        "INSERT INTO public.users (email, full_name, department, password, role) VALUES ($1, $2, $3, $4, $5)")
-    return mkuser(user['email'], user['full_name'], user['department'], user['password'], int(user['role']))
+    sql_raw = "INSERT INTO public.users (email, full_name, department, password, role) VALUES ({0}, {1}, {2}, {3}, {4})"
+    sql = sql_raw.format(user['email'], user['full_name'], user['department'], user['password'], int(user['role']))
+    return insert(sql)
 
 
 def get_all():
-    get_all = db.prepare("SELECT * FROM public.users")
+    sql = "SELECT * FROM public.users"
+    result = query(sql)
 
-    with db.xact():
-        users = []
-        for user_row in get_all.rows():
-            users.append(User(user_row))
-        return users
+    users = []
+    for user_row in result:
+        users.append(User(user_row))
+    return users
 
 
 def get_user_by_email(email):
-    get_by_email = db.prepare("SELECT * FROM public.users WHERE email = $1")
-
-    with db.xact():
-        user_row = next(x for x in get_by_email.rows(email))
-        return User(user_row)
+    sql_raw = "SELECT * FROM public.users WHERE email = '{0}'"
+    sql = sql_raw.format(email)
+    print(query(sql))
+    user_row = query(sql)[0]
+    return User(user_row)
 
 
 def get_by_id(user_id):
-    get_user_by_id = db.prepare("SELECT * FROM public.users WHERE user_id = $1")
-
-    with db.xact():
-        user_row = next(x for x in get_user_by_id.rows(int(user_id)))
-        return User(user_row)
+    sql_raw = "SELECT * FROM public.users WHERE user_id = {0}"
+    sql = sql_raw.format(user_id)
+    user_row = query(sql)[0]
+    return User(user_row)
 
 
 def get_all_by_name(full_name):
-    get_users_by_name = db.prepare("SELECT * FROM public.users WHERE  LOWER( full_name ) like $1")
-
-    with db.xact():
-        users = []
-        for user_row in get_users_by_name.rows('%' + full_name.lower() + '%'):
-            users.append(User(user_row))
-        return users
+    sql_raw = "SELECT * FROM public.users WHERE  LOWER( full_name ) like '{0}'"
+    sql = sql_raw.format('%' + full_name.lower() + '%')
+    result = query(sql)
+    users = []
+    for user_row in result:
+        users.append(User(user_row))
+    return users
 
 
 def update(user_id, user):
-    update_user = db.prepare(
-        "UPDATE public.users SET email = $2, full_name = $3, department = $4, password = $5, role = $6 WHERE user_id = $1")
-    return update_user(int(user_id), user['email'], user['full_name'], user['department'], user['password'],
-                       int(user['role']))
+    sql_raw = "UPDATE public.users SET email = '{1}', full_name = '{2}', department = '{3}', password = '{4}', role = {5} WHERE user_id = {0}"
+    sql = sql_raw.format(user_id, user['email'], user['full_name'], user['department'], user['password'], user['role'])
+    return update_db(sql)
 
 
 def delete(user_id):
-    delete_user = db.prepare("DELETE FROM public.users WHERE user_id = $1")
-    return delete_user(int(user_id))
+    sql_raw = "DELETE FROM public.users WHERE user_id = {0}"
+    sql = sql_raw.format(user_id)
+    return delete_db(sql)
