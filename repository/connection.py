@@ -41,7 +41,3 @@ def update(sql):
 
 def delete(sql):
     return query(sql, False)
-
-
-def get_db():
-    return None

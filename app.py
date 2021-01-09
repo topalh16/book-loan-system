@@ -34,6 +34,9 @@ def authenticate():
     if not user:
         flash('Email or password is incorrect.')
         return redirect('/login')
+    elif isinstance(user, str):
+        flash(user)
+        return redirect('/login')
 
     session['user'] = serialize(user)
     return redirect('/')

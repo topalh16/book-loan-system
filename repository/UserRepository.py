@@ -21,15 +21,20 @@ def get_all():
 def get_user_by_email(email):
     sql_raw = "SELECT * FROM public.users WHERE email = '{0}'"
     sql = sql_raw.format(email)
-    print(query(sql))
-    user_row = query(sql)[0]
+    result = query(sql)
+    if len(result) == 0:
+        return None
+    user_row = result[0]
     return User(user_row)
 
 
 def get_by_id(user_id):
     sql_raw = "SELECT * FROM public.users WHERE user_id = {0}"
     sql = sql_raw.format(user_id)
-    user_row = query(sql)[0]
+    result = query(sql)
+    if len(result) == 0:
+        return None
+    user_row = result[0]
     return User(user_row)
 
 

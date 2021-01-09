@@ -3,6 +3,8 @@ from repository.UserRepository import get_user_by_email, get_all, save, update, 
 
 def attempt_login(email, password):
     user = get_user_by_email(email)
+    if user is None:
+        return 'This email is not registered.'
     if user.password == password:
         return user
     else:
