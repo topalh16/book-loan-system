@@ -3,7 +3,7 @@ import datetime
 
 
 def save_borrow(borrow):
-    return save(borrow)[1]
+    return save(borrow)
 
 
 def lend_book_to_user(isbn, user_id):

@@ -12,7 +12,7 @@ def attempt_login(email, password):
 
 
 def save_user(user):
-    return save(user)[1]
+    return save(user)
 
 
 def get_all_users():

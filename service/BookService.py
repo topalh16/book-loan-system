@@ -10,7 +10,7 @@ def get_book_by_isbn(isbn):
 
 
 def save_book(book):
-    return save(book)[1]
+    return save(book)
 
 
 def update_book(isbn, book):
