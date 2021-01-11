@@ -15,7 +15,10 @@ def get_all():
 def get(isbn):
     sql_raw = "SELECT * FROM public.books B JOIN authors A ON B.author_id=A.author_id WHERE isbn='{0}'"
     sql = sql_raw.format(isbn)
-    book_row = query(sql)
+    result = query(sql)
+    if len(result) == 0:
+        return None
+    book_row = result[0]
     return Book(book_row)
 
 
