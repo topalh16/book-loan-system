@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, session, redirect, flash
 from service.UserService import attempt_login, get_all_users, save_user, get_user_by_id, update_user, delete_user, \
     get_users_by_name
 from service.BookService import get_all_books, get_book_by_isbn, save_book, update_book, delete_book
-from service.AuthorService import get_all_authors, save_author
+from service.AuthorService import get_all_authors, save_author, update_author, get_author_by_id
 from service.BooksBorrowedService import lend_book_to_user, get_borrows_by_user_id, return_books, \
     get_not_returned_borrows_by_user_id
 from service.CommentRatingService import save_comment_rating
@@ -112,6 +112,29 @@ def authors():
             return redirect("/")
         authors = get_all_authors()
         return render_template('authors.html', title="Authors", user=user, authors=authors, saved_authors=affected_rows)
+    return redirect("/login")
+
+
+# Editing existing author
+@app.route('/author/edit/<author_id>', methods=['GET'])
+def edit_author(author_id):
+    if 'user' in session:
+        user = deserialize(session['user'])
+        if user.role is not Role.ADMIN.value:
+            return redirect("/")
+        selected_author = get_author_by_id(author_id)
+        authors = get_all_authors()
+        return render_template('author_edit.html', title="Author Edit", user=user, authors=authors,
+                               selected_author=selected_author)
+    return redirect("/login")
+
+
+# Updating existing author
+@app.route('/author/update/<author_id>', methods=['POST'])
+def author_update(author_id):
+    if 'user' in session:
+        update_author(author_id, request.form)
+        return redirect("/authors")
     return redirect("/login")
 
 
